@@ -73,7 +73,7 @@ proc finish {} {
  $ns flush-trace
  close $nf
  puts "running nam..."
- exec nam Tcpred1.nam &
+ exec nam tcpred1.nam &
  exit 0
  }
 #Calling finish procedure

@@ -1,0 +1,49 @@
+V -t * -v 1.0a5 -a 0
+A -t * -n 1 -p 0 -o 0x7fffffff -c 30 -a 1
+A -t * -h 1 -m 1073741823 -s 0
+c -t * -i 8 -n gold
+c -t * -i 4 -n green
+c -t * -i 9 -n red
+c -t * -i 5 -n yellow
+c -t * -i 1 -n dodgerblue
+c -t * -i 6 -n black
+c -t * -i 2 -n red
+c -t * -i 7 -n magenta
+c -t * -i 3 -n cyan
+n -t * -a 8 -s 8 -S UP -v square -c black -i black
+n -t * -a 4 -s 4 -S UP -v circle -c black -i black
+n -t * -a 0 -s 0 -S UP -v circle -c black -i black
+n -t * -a 10 -s 10 -S UP -v square -c black -i black
+n -t * -a 9 -s 9 -S UP -v square -c black -i black
+n -t * -a 5 -s 5 -S UP -v circle -c black -i black
+n -t * -a 1 -s 1 -S UP -v circle -c black -i black
+n -t * -a 6 -s 6 -S UP -v circle -c black -i black
+n -t * -a 2 -s 2 -S UP -v circle -c black -i black
+n -t * -a 7 -s 7 -S UP -v circle -c black -i black
+n -t * -a 3 -s 3 -S UP -v circle -c black -i black
+l -t * -s 8 -d 10 -S UP -r 1000000 -D 0.01 -c cyan
+l -t * -s 0 -d 8 -S UP -r 1000000 -D 0.01 -c black -o down
+l -t * -s 1 -d 8 -S UP -r 500000 -D 0.01 -c black -o down-right
+l -t * -s 2 -d 8 -S UP -r 750000 -D 0.01 -c black -o down-left
+l -t * -s 3 -d 9 -S UP -r 1000000 -D 0.01 -c black -o up
+l -t * -s 4 -d 8 -S UP -r 1000000 -D 0.01 -c black -o up
+l -t * -s 5 -d 8 -S UP -r 1000000 -D 0.01 -c black -o up-right
+l -t * -s 6 -d 8 -S UP -r 1000000 -D 0.01 -c black -o up-left
+l -t * -s 7 -d 10 -S UP -r 1000000 -D 0.01 -c black -o down
+l -t * -s 8 -d 9 -S UP -r 1000000 -D 0.01 -c cyan -o down-right
+l -t * -s 10 -d 9 -S UP -r 1000000 -D 0.01 -c cyan -o down-right
+q -t * -s 10 -d 8 -a 0.1
+q -t * -s 8 -d 10 -a 0.1
+q -t * -s 8 -d 9 -a 0.1
+q -t * -s 9 -d 8 -a 0.1
+n -t 0 -s 0 -S DLABEL -l "CL1" -L ""
+n -t 0 -s 1 -S DLABEL -l "CL2" -L ""
+n -t 0 -s 2 -S DLABEL -l "CL3" -L ""
+n -t 0 -s 3 -S DLABEL -l "CL4" -L ""
+n -t 0 -s 4 -S DLABEL -l "RC1" -L ""
+n -t 0 -s 5 -S DLABEL -l "RC2" -L ""
+n -t 0 -s 6 -S DLABEL -l "RC3" -L ""
+n -t 0 -s 7 -S DLABEL -l "RC4" -L ""
+n -t 0 -s 8 -S DLABEL -l "ROU1" -L ""
+n -t 0 -s 9 -S DLABEL -l "ROU2" -L ""
+n -t 0 -s 10 -S DLABEL -l "ROU3" -L ""

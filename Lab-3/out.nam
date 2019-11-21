@@ -1,0 +1,85 @@
+V -t * -v 1.0a5 -a 0
+W -t * -x 208.519 -y 100.9762
+A -t * -n 1 -p 0 -o 0x7fffffff -c 30 -a 1
+A -t * -h 1 -m 1073741823 -s 0
+c -t * -i 1 -n blue
+n -t * -a 17 -s 17 -S UP -v circle -c black -i black -x 125.115 -y 49.8054 -Z 0.0
+n -t * -a 0 -s 0 -S UP -v circle -c black -i black -x -57.6704 -y 74.9762 -Z 0.0
+n -t * -a 18 -s 18 -S UP -v circle -c black -i black -x 183.037 -y 49.8054 -Z 0.0
+n -t * -a 1 -s 1 -S UP -v circle -c black -i black -x -74.9762 -y 50.9936 -Z 0.0
+n -t * -a 20 -s 20 -S UP -v circle -c black -i black -x 133.147 -y 10.096 -Z 0.0
+n -t * -a 19 -s 19 -S UP -v circle -c black -i black -x 152.962 -y 50.868 -Z 0.0
+n -t * -a 2 -s 2 -S UP -v circle -c black -i black -x -36.0815 -y 48.2768 -Z 0.0
+n -t * -a 21 -s 21 -S UP -v circle -c black -i black -x 208.519 -y 11.5933 -Z 0.0
+n -t * -a 3 -s 3 -S UP -v circle -c black -i black -x -56.8873 -y 38.8308 -Z 0.0
+n -t * -a 22 -s 22 -S UP -v circle -c black -i black -x 183.386 -y 10.0766 -Z 0.0
+n -t * -a 4 -s 4 -S UP -v circle -c black -i black -x -76.5445 -y 10.1674 -Z 0.0
+n -t * -a 23 -s 23 -S UP -v circle -c black -i black -x 161.768 -y 10.4865 -Z 0.0
+n -t * -a 5 -s 5 -S UP -v circle -c black -i black -x -38.0313 -y 7.9817 -Z 0.0
+n -t * -a 24 -s 24 -S UP -v circle -c black -i black -x -10.6704 -y 100.9762 -Z 0.0
+n -t * -a 6 -s 6 -S UP -v circle -c black -i black -x -19.8069 -y 7.9817 -Z 0.0
+n -t * -a 25 -s 25 -S UP -v circle -c black -i black -x 100.00 -y 100.9762 -Z 0.0
+n -t * -a 7 -s 7 -S UP -v circle -c black -i black -x -57.8945 -y 10.2669 -Z 0.0
+n -t * -a 8 -s 8 -S UP -v circle -c black -i black -x 39.0212 -y 74.9762 -Z 0.0
+n -t * -a 9 -s 9 -S UP -v circle -c black -i black -x 8.07317 -y 50.9936 -Z 0.0
+n -t * -a 10 -s 10 -S UP -v circle -c black -i black -x 88.6017 -y 50.9936 -Z 0.0
+n -t * -a 11 -s 11 -S UP -v circle -c black -i black -x 37.3668 -y 50.9936 -Z 0.0
+n -t * -a 12 -s 12 -S UP -v circle -c black -i black -x 16.88 -y 10.1674 -Z 0.0
+n -t * -a 13 -s 13 -S UP -v circle -c black -i black -x 64.635 -y 27.4717 -Z 0.0
+n -t * -a 14 -s 14 -S UP -v circle -c black -i black -x 86.0753 -y 7.9817 -Z 0.0
+n -t * -a 15 -s 15 -S UP -v circle -c black -i black -x 45.6967 -y 29.2669 -Z 0.0
+n -t * -a 16 -s 16 -S UP -v circle -c black -i black -x 148.967 -y 72.6919 -Z 0.0
+l -t * -s 0 -d 3 -S UP -r 1500000 -D 0.01 -c black -o down
+l -t * -s 0 -d 1 -S UP -r 3000000 -D 0.01 -c black -o left-down
+l -t * -s 0 -d 2 -S UP -r 3000000 -D 0.01 -c black -o right-down
+l -t * -s 1 -d 3 -S UP -r 2000000 -D 0.01 -c black -o right-down
+l -t * -s 3 -d 4 -S UP -r 1500000 -D 0.01 -c black -o left-down
+l -t * -s 3 -d 7 -S UP -r 1500000 -D 0.01 -c black -o right-down
+l -t * -s 2 -d 5 -S UP -r 1000000 -D 0.01 -c black -o right-down
+l -t * -s 2 -d 6 -S UP -r 1500000 -D 0.01 -c black -o right
+l -t * -s 8 -d 11 -S UP -r 1500000 -D 0.01 -c black -o down
+l -t * -s 8 -d 9 -S UP -r 2000000 -D 0.01 -c black -o left-down
+l -t * -s 8 -d 10 -S UP -r 3000000 -D 0.01 -c black -o right-down
+l -t * -s 9 -d 11 -S UP -r 2000000 -D 0.01 -c black -o right-down
+l -t * -s 11 -d 12 -S UP -r 1500000 -D 0.01 -c black -o left-down
+l -t * -s 11 -d 15 -S UP -r 1500000 -D 0.01 -c black -o right-down
+l -t * -s 10 -d 13 -S UP -r 1000000 -D 0.01 -c black -o right-down
+l -t * -s 10 -d 14 -S UP -r 1500000 -D 0.01 -c black -o right
+l -t * -s 16 -d 19 -S UP -r 1500000 -D 0.01 -c black -o down
+l -t * -s 16 -d 17 -S UP -r 3000000 -D 0.01 -c black -o left-down
+l -t * -s 16 -d 18 -S UP -r 3000000 -D 0.01 -c black -o right-down
+l -t * -s 17 -d 19 -S UP -r 2000000 -D 0.01 -c black -o right-down
+l -t * -s 19 -d 20 -S UP -r 1500000 -D 0.01 -c black -o left-down
+l -t * -s 19 -d 23 -S UP -r 1500000 -D 0.01 -c black -o right-down
+l -t * -s 18 -d 21 -S UP -r 1000000 -D 0.01 -c black -o right-down
+l -t * -s 18 -d 22 -S UP -r 1500000 -D 0.01 -c black -o right
+l -t * -s 24 -d 0 -S UP -r 3000000 -D 0.01 -c black -o left-down
+l -t * -s 24 -d 8 -S UP -r 3000000 -D 0.01 -c black -o right-down
+l -t * -s 25 -d 8 -S UP -r 3000000 -D 0.01 -c black -o left-down
+l -t * -s 25 -d 16 -S UP -r 3000000 -D 0.01 -c black -o right-down
+n -t 0 -s 0 -S DLABEL -l "S" -L ""
+n -t 0 -s 1 -S DLABEL -l "N1" -L ""
+n -t 0 -s 2 -S DLABEL -l "N3" -L ""
+n -t 0 -s 3 -S DLABEL -l "N2" -L ""
+n -t 0 -s 4 -S DLABEL -l "R1" -L ""
+n -t 0 -s 7 -S DLABEL -l "R2" -L ""
+n -t 0 -s 5 -S DLABEL -l "R3" -L ""
+n -t 0 -s 6 -S DLABEL -l "R4" -L ""
+n -t 0 -s 8 -S DLABEL -l "S" -L ""
+n -t 0 -s 9 -S DLABEL -l "N1" -L ""
+n -t 0 -s 10 -S DLABEL -l "N3" -L ""
+n -t 0 -s 11 -S DLABEL -l "N2" -L ""
+n -t 0 -s 12 -S DLABEL -l "R1" -L ""
+n -t 0 -s 13 -S DLABEL -l "R2" -L ""
+n -t 0 -s 14 -S DLABEL -l "R3" -L ""
+n -t 0 -s 15 -S DLABEL -l "R4" -L ""
+n -t 0 -s 16 -S DLABEL -l "S" -L ""
+n -t 0 -s 17 -S DLABEL -l "N1" -L ""
+n -t 0 -s 18 -S DLABEL -l "N3" -L ""
+n -t 0 -s 19 -S DLABEL -l "N2" -L ""
+n -t 0 -s 20 -S DLABEL -l "R1" -L ""
+n -t 0 -s 21 -S DLABEL -l "R2" -L ""
+n -t 0 -s 22 -S DLABEL -l "R3" -L ""
+n -t 0 -s 23 -S DLABEL -l "R4" -L ""
+n -t 0 -s 24 -S DLABEL -l "Overlay" -L ""
+n -t 0 -s 25 -S DLABEL -l "Overlay" -L ""

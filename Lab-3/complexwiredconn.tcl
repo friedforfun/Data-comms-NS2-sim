@@ -1,7 +1,6 @@
 # Create a simulator object
 set ns [new Simulator -multicast on]
-# Open the nam trace file, associated with nf, log everything as nam
-output in nf
+# Open the nam trace file, associated with nf, log everything as nam output in nf
 set nf [open out.nam w]
 $ns namtrace-all $nf
 set node_(n0) [$ns node]
