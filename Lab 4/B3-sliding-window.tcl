@@ -26,7 +26,7 @@ proc build_topology { ns } {
         $node_(r1) color "blue"
         $node_(r2) color "blue"
 	$node_(r1) shape "square"
-        $node_(r2) shape "squarer"
+        $node_(r2) shape "square"
 
         $ns at 0.0 "$node_(s1) label Sliding-W-sender"
         $ns at 0.0 "$node_(s2) label CBR-sender"
