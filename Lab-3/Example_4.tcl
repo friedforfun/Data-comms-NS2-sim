@@ -5,8 +5,8 @@
  $ns namtrace-all $nf
  
  #Open the trace file
- set nt [open example4.tr w]
- $ns trace-all $nt
+ set tf [open example4.tr w]
+ $ns trace-all $tf
  
  set proto rlm
 #------------COLOR DESCRIPTION---------------#
@@ -86,9 +86,10 @@ $ns duplex-link-op $ROU3 $ROU1 queuePos 0.1
  $ns duplex-link-op $ROU2 $ROU3 color cyan
 # ---------------- FINISH PROCEDURE -------------#
 proc finish {} {
-     global ns nf nt nf1
+     global ns nf tf nf1
      $ns flush-trace
 	 close $nf
+	 close $tf
 	 puts "running nam..."
 	 exec nam example4.nam &
 	 exit 0}
