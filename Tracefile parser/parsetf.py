@@ -1,7 +1,6 @@
 import csv
 import argparse
 
-from typing import Set, Any
 if __name__ == '__main__':
 	parser = argparse.ArgumentParser(formatter_class=argparse.RawTextHelpFormatter)
 	parser.add_argument('filename')
@@ -27,12 +26,11 @@ if __name__ == '__main__':
 	thops = 0
 	tdelay = 0.0
 	avedelay = 0
+	totallines = 0
 
 
 	def uniquepackets(trf):
-		x=[]
-		for packet in trf:
-			x.append(packet[PKTID])
+		x=[packet[PKTID] for packet in trf]
 		uniquepkt = set(x)
 		return uniquepkt
 
@@ -55,7 +53,7 @@ if __name__ == '__main__':
 		return float(end[TIME]) - float(start[TIME])
 
 	def nodetonodepackets(pktlist, node, pkttype):
-		nodelist = [packet for packet in pktlist if packet[PKTTYPE] == pkttype && packet[FROMNODE] == node]
+		nodelist = [packet for packet in pktlist if packet[PKTTYPE] == pkttype and packet[FROMNODE] == node]
 		return nodelist
 		
 	with open(args.filename) as file:
@@ -64,9 +62,9 @@ if __name__ == '__main__':
 		for line in f:
 			trace.append(line.split())
 		f.close()
-		
 
 	for x in trace:
+		totallines += 1
 		if x[EVENT] == "d":
 			dropped += 1
 		elif x[EVENT] == "-":
@@ -74,6 +72,7 @@ if __name__ == '__main__':
 		elif x[EVENT] == "r":
 			recieved += 1
 
+	print(totallines)
 	packets = uniquepackets(trace)
 
 	allpktdata = []
