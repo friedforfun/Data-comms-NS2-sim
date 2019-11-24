@@ -3,9 +3,9 @@ import argparse
 
 from typing import Set, Any
 if __name__ == '__main__':
-	parse = argparse.ArgumentParser(formatter_class=argparse.RawTextHelpFormatter)
-	parse.add_argument("-t", type=argparse.FileType('r'), help="Pass the tracefile you wish to parse here")
-	args = vars(parse.parse_args())
+	parser = argparse.ArgumentParser(formatter_class=argparse.RawTextHelpFormatter)
+	parser.add_argument('filename')
+	args = parser.parse_args()
 
 	# fields are defined below
 	EVENT = 0
@@ -26,14 +26,6 @@ if __name__ == '__main__':
 	recieved = 0
 	thops = 0
 	tdelay = 0.0
-
-	def populatetrace(trf):
-		f = open(trf, "r")
-		trc = []
-		for line in f:
-			trc.append(line.split())
-		f.close()
-		return trc
 
 
 	def uniquepackets(trf):
@@ -59,10 +51,15 @@ if __name__ == '__main__':
 	def packetdelay(pktlist):
 		start = pktlist[0]
 		end = pktlist[-1]
-		return end[TIME] - start[TIME]
+		return float(end[TIME]) - float(start[TIME])
 
-
-	trace = populatetrace(args.t)
+	with open(args.filename) as file:
+		f = file
+		trace = []
+		for line in f:
+			trace.append(line.split())
+		f.close()
+		
 
 	for x in trace:
 		if x[EVENT] == "d":
@@ -85,19 +82,19 @@ if __name__ == '__main__':
 	throughput = recieved / sent * 100
 	collisions = sent - recieved - dropped
 
-	print("Packets sent: " + sent)
-	print("Packets recieved: " + recieved)
-	print("Packets dropped: " + dropped)
-	print("Total number of hops for all packets: " + thops)
-	print("Total delay for all packets: " + tdelay)
+	print("Packets sent: ", sent)
+	print("Packets recieved: ", recieved)
+	print("Packets dropped: ", dropped)
+	print("Total number of hops for all packets: ", thops)
+	print("Total delay for all packets: ", tdelay)
 
-	with open('totals.csv', 'wb') as csvfile:
-		writer = csv.writer(csvfile, delimiter=',', quotechar='|', quoting=csv.QUOTE_MINIMAL)
+	with open('totals.csv', 'w') as csvfile:
+		writer = csv.writer(csvfile)
 		writer.writerow(['Sent', 'Recieved', 'Dropped', 'Total hops', 'Total delay'])
 		writer.writerow([sent, recieved, dropped, thops, tdelay])
 
-	with open('packetdata', 'wb') as csvfile:
-		writer = csv.writer(csvfile, deimiter=',', quotechar='|', quoting=csv.QUOTE_MINIMAL)
+	with open('packetdata.csv', 'w') as csvfile:
+		writer = csv.writer(csvfile)
 		writer.writerow(['Packet ID', 'Hops', 'End-to-end Delay'])
 		for x in allpktdata:
 			writer.writerow([x[0], x[1], x[2]])
