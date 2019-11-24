@@ -31,6 +31,11 @@ for {set i 0} {$i < $networkSize} {incr i} {
     $ns duplex-link $n($i) $n([expr ($i+1)%7]) 10Mb     10ms DropTail
 }
 
+for {set i 10} {$i < $networkSize} {$i + 5} {
+    $ns duplex-link $n($i) $n([expr ($i+1)%$networkSize]) 10Mb     10ms DropTail
+}
+
+
 #Call the finish procedure after 5 seconds simulation time
 $ns at 100.0 "finish"
 
