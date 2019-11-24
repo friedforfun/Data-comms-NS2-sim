@@ -26,6 +26,7 @@ if __name__ == '__main__':
 	recieved = 0
 	thops = 0
 	tdelay = 0.0
+	avedelay = 0
 
 
 	def uniquepackets(trf):
@@ -44,7 +45,7 @@ if __name__ == '__main__':
 
 	def calcpkthops(pktlist):
 		# packet hops = number of 'r'
-		hops = [packet for packet in pktlist if packet[EVENT] == "r"]
+		hops = [packet for packet in pktlist if packet[EVENT] == "-"]
 		return len(hops)
 
 
@@ -53,6 +54,10 @@ if __name__ == '__main__':
 		end = pktlist[-1]
 		return float(end[TIME]) - float(start[TIME])
 
+	def nodetonodepackets(pktlist, node, pkttype):
+		nodelist = [packet for packet in pktlist if packet[PKTTYPE] == pkttype && packet[FROMNODE] == node]
+		return nodelist
+		
 	with open(args.filename) as file:
 		f = file
 		trace = []
@@ -79,6 +84,11 @@ if __name__ == '__main__':
 		tdelay += packetdelay(thispacket)
 		allpktdata.append([x, calcpkthops(thispacket), packetdelay(thispacket)])
 
+	for x in allpktdata:
+		avedelay += x[2]
+
+	avedelay = avedelay/len(allpktdata)
+
 	throughput = recieved / sent * 100
 	collisions = sent - recieved - dropped
 
@@ -87,11 +97,12 @@ if __name__ == '__main__':
 	print("Packets dropped: ", dropped)
 	print("Total number of hops for all packets: ", thops)
 	print("Total delay for all packets: ", tdelay)
+	print("The average delay over all packets: ", avedelay)
 
 	with open('totals.csv', 'w') as csvfile:
 		writer = csv.writer(csvfile)
-		writer.writerow(['Sent', 'Recieved', 'Dropped', 'Total hops', 'Total delay'])
-		writer.writerow([sent, recieved, dropped, thops, tdelay])
+		writer.writerow(['Sent', 'Recieved', 'Dropped', 'Total hops', 'Total delay', 'Average delay'])
+		writer.writerow([sent, recieved, dropped, thops, tdelay, avedelay])
 
 	with open('packetdata.csv', 'w') as csvfile:
 		writer = csv.writer(csvfile)
