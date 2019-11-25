@@ -59,7 +59,7 @@ for {set i 26} {$i < $networkSize} {incr i} {
 # use the distance vector routing protocol
 $ns rtproto LS
 
-for {set i 0} {$i < 10} {incr i} {
+for {set i 0} {$i < 3} {incr i} {
     set udp($i) [new Agent/UDP]
     $ns attach-agent $n([expr ($i*7)%$networkSize]) $udp($i)
     set null($i) [new Agent/Null]
@@ -88,19 +88,11 @@ for {set i 0} {$i < 10} {incr i} {
 }
 
 
-for {set i 0} {$i < 5} {incr i} {
+for {set i 0} {$i < 3} {incr i} {
     $ns at 0.01 "$cbr($i) start"
     $ns at 0.01 "$ftp($i) start"
-    $ns at 75.0 "$cbr($i) stop"
-    $ns at 90.0 "$ftp($i) stop"
-
-}
-
-for {set i 5} {$i < 10} {incr i} {
-    $ns at 0.01 "$ftp($i) start"
-    $ns at 5.0 "$cbr($i) start"
-    $ns at 50.0 "$cbr($i) stop"
-    $ns at 19.0 "$ftp($i) stop"
+    $ns at 15.0 "$cbr($i) stop"
+    $ns at 20.0 "$ftp($i) stop"
 
 }
 

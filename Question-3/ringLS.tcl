@@ -90,8 +90,8 @@ for {set i 0} {$i < 3} {incr i} {
 for {set i 0} {$i < 3} {incr i} {
     $ns at 0.01 "$cbr($i) start"
     $ns at 0.01 "$ftp($i) start"
-    $ns at 75.0 "$cbr($i) stop"
-    $ns at 90.0 "$ftp($i) stop"
+    $ns at 15.0 "$cbr($i) stop"
+    $ns at 20.0 "$ftp($i) stop"
 
 }
 
