@@ -49,7 +49,9 @@ $ns duplex-link $n(0) $R1 100Mb 10ms DropTail
 $ns duplex-link $n(25) $R2 100Mb 10ms DropTail
 
 for {set i 1} {$i < 25} {incr i} {
-    $ns duplex-link $n($i) $n(0) 10Mb 10ms DropTail
+    for {set j 1} {$j < 25} {incr j} {
+        $ns duplex-link $n($i) $n($j) 10Mb 10ms DropTail
+    }
 }
 
 for {set i 26} {$i < $networkSize} {incr i} {
