@@ -37,20 +37,36 @@ def findPacketSet(list):
 def writeTotals(list):
     with open('totals.csv', 'w') as csvfile:
         writer = csv.writer(csvfile)
-        writer.writerow(['Total Packets', 'Total sent', 'Total recieved', 'Total Dropped', 'Average end-to-end Delay', 'Throughput', 'Collisions'])
+        writer.writerow(['Total Packets', 'Total sent', 'Total recieved', 'Total Dropped', 'Average end-to-end Delay', 'Throughput', 'Lost'])
         writer.writerow(list)
 
 def averagedelay(list, packetset):
     pool = Pool(os.cpu_count() - 1)
     delays = pool.map(findPacketDelay, [findPacketLines(list, x) for x in packetset])
+    pool.close()
+    pool.join()
     # delaydict = dict(zip(packetset, delays))
     return sum(delays) / len(delays)
 
 def cleanlist(list):
     return [x for x in list if x[EVENT] != 'v']
 
+def isdatatraffic(sublist):
+    protocols = set(['cbr', 'ftp', 'tcp', 'udp'])
+    setlist = set(sublist)
+    if (protocols & setlist):
+        return True
+    else:
+        return False
+
+def protocoltraffic(tlist):
+    rlist = list(filter(isdatatraffic, tlist))
+    return rlist
+
 def prog(trace):
-    tracelist = cleanlist(trace)
+    tracelist = protocoltraffic(cleanlist(trace))
+    #tracelist = cleanlist(trace)
+
     packetset = findPacketSet(tracelist)
 
     #total number of unique packets
@@ -68,8 +84,8 @@ def prog(trace):
     # average delay for each packet
     avedelay = averagedelay(tracelist, packetset)
 
-    # Collisions
-    collisions = sent - recieved - dropped
+    # Lost packets
+    lost = sent - recieved
 
     # Throughput
     throughput = (recieved/sent) * 100
@@ -80,9 +96,9 @@ def prog(trace):
     print("Dropped:", dropped)
     print("Average delay:", avedelay)
     print("Throughput:", throughput, "%")
-    print("Collisions:", collisions)
+    print("Lost:", lost)
 
-    csvlist = [packets, sent, recieved, dropped, avedelay, throughput, collisions]
+    csvlist = [packets, sent, recieved, dropped, avedelay, throughput, lost]
     writeTotals(csvlist)
 
 
