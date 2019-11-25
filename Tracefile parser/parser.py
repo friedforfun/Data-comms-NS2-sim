@@ -10,23 +10,6 @@ PKTID = 11
 def sortTime(element):
     return float(element[TIME])
 
-def processlist(trlist):
-    sent = 0
-    dropped = 0
-    recieved = 0
-    pktset = []
-    for x in trlist:
-        if x[EVENT] == '-':
-            sent += 1
-        elif x[EVENT] == 'd':
-            dropped += 1
-        elif x[EVENT] == 'r':
-            recieved += 1
-
-        pktset.append(int(x[PKTID]))
-        pktset = sorted(set(pktset))
-    return {'sent': sent, 'dropped': dropped, 'recieved': recieved, 'packetset': pktset}
-
 def countsent(list):
     return len([x for x in list if x[EVENT] == '-'])
 
@@ -35,11 +18,6 @@ def countdropped(list):
 
 def countrecieved(list):
     return len([x for x in list if x[EVENT] == 'r'])
-
-def findPacketSet(list):
-    temp = [int(x[PKTID]) for x in list]
-    packetset = set(temp)
-    return sorted(packetset)
 
 def findPacketLines(list, packetid):
     packetLines = [x for x in list if int(x[PKTID]) == packetid]
@@ -50,6 +28,11 @@ def findPacketDelay(list):
     start = packets[0]
     end = packets[-1]
     return float(end[TIME]) - float(start[TIME])
+
+def findPacketSet(list):
+    temp = [int(x[PKTID]) for x in list]
+    packetset = set(temp)
+    return sorted(packetset)
 
 def writeTotals(list):
     with open('totals.csv', 'w') as csvfile:
@@ -81,29 +64,22 @@ def protocoltraffic(tlist):
     return rlist
 
 def prog(trace):
-    tracelist = protocoltraffic(trace)
+    tracelist = protocoltraffic(cleanlist(trace))
     #tracelist = cleanlist(trace)
 
-    #packetset = findPacketSet(tracelist)
-
-    dictionary = processlist(tracelist)
-
-    packetset = dictionary.get('packetset')
-    sent = dictionary.get('sent')
-    dropped = dictionary.get('dropped')
-    recieved = dictionary.get('recieved')
+    packetset = findPacketSet(tracelist)
 
     #total number of unique packets
     packets = len(packetset)
 
     #total number of packets sent from all nodes
-    #sent = countsent(tracelist)
+    sent = countsent(tracelist)
 
     # number of dropped packets
-    #dropped = countdropped(tracelist)
+    dropped = countdropped(tracelist)
 
     # number of recieved packets
-    #recieved = countrecieved(tracelist)
+    recieved = countrecieved(tracelist)
 
     # average delay for each packet
     avedelay = averagedelay(tracelist, packetset)
