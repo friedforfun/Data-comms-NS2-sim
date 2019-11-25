@@ -51,12 +51,6 @@ def findPacketDelay(list):
     end = packets[-1]
     return float(end[TIME]) - float(start[TIME])
 
-def writeTotals(list):
-    with open('totals.csv', 'w') as csvfile:
-        writer = csv.writer(csvfile)
-        writer.writerow(['Total Packets', 'Total sent', 'Total recieved', 'Total Dropped', 'Average end-to-end Delay', 'Throughput', 'Lost'])
-        writer.writerow(list)
-
 def averagedelay(list, packetset):
     pool = Pool(os.cpu_count() - 1)
     delays = pool.map(findPacketDelay, [findPacketLines(list, x) for x in packetset])
@@ -64,6 +58,12 @@ def averagedelay(list, packetset):
     pool.join()
     # delaydict = dict(zip(packetset, delays))
     return sum(delays) / len(delays)
+
+def writeTotals(list):
+    with open('totals.csv', 'w') as csvfile:
+        writer = csv.writer(csvfile)
+        writer.writerow(['Total Packets', 'Total sent', 'Total recieved', 'Total Dropped', 'Average end-to-end Delay', 'Throughput', 'Lost'])
+        writer.writerow(list)
 
 def cleanlist(list):
     return [x for x in list if x[EVENT] != 'v']
