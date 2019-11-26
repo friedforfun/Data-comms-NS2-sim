@@ -50,23 +50,39 @@ def findPacketSet(list):
 def findPacketLines(list, packetid):
     # packetLines = [x for x in list if int(x[PKTID]) == packetid]
     # loops over list for evey element of packet id, really inefficient
+
     packetLines = dict.fromkeys(packetid, [])
+    for x in packetLines:
+        print("key:", x, "value:", packetLines.get(x))
     for x in list:
         tempentry = packetLines[int(x[PKTID])]
         tempentry.append(x)
         packetLines.update({int(x[PKTID]): tempentry})
+
+
+
+    print("key: ", 27, ", value: ")
+    for x in packetLines[61]:
+        print("27 val:", x)
+
     print("Packet lines dict complete")
     return packetLines
 
 def findPacketDelay(list):
     packets = sorted(list, key=sortTime)
+    #print("Packet ID:", list[0][PKTID])
     start = packets[0]
     end = packets[-1]
-    return float(end[TIME]) - float(start[TIME])
+    #print("Start time: ", start[TIME])
+    #print("End time: ", end[TIME])
+    avg = float(end[TIME]) - float(start[TIME])
+    #print("an average found: ", avg)
+    return avg
 
 def averagedelayTHREADED(packetdict):
-    pool = Pool(os.cpu_count() - 1)
-    delays = pool.map(findPacketDelay, [packetdict.get(key) for key in packetdict], 4000)
+    pool = Pool(os.cpu_count())
+    delays = pool.map(findPacketDelay, [packetdict.get(key) for key in packetdict], 400)
+    print("Delays list populated")
     pool.close()
     pool.join()
     # delaydict = dict(zip(packetset, delays))
@@ -128,7 +144,7 @@ def prog(trace):
 
     packetdict = findPacketLines(tracelist, packetset)
 
-    avedelay = averagedelayTHREADED(packetdict)
+    avedelay = averagedelay(packetdict)
 
     # average delay for each packet
     #avedelay = averagedelay(tracelist, packetset)
