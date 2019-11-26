@@ -27,12 +27,6 @@ def processlist(trlist):
         pktset = sorted(set(pktset))
     return {'sent': sent, 'dropped': dropped, 'recieved': recieved, 'packetset': pktset}
 
-def setTraffic(listitem):
-    if listitem[EVENT] == '-':
-        return True
-    else:
-        return False
-
 def countsent(list):
     return len([x for x in list if x[EVENT] == '-'])
 
@@ -73,6 +67,11 @@ def averagedelayTHREADED(packetdict):
     print("Delays list populated")
     pool.close()
     pool.join()
+    return sum(delays) / len(delays)
+
+def averagedelay(packetdict):
+    delays = [findPacketDelay(packetdict.get(key)) for key in packetdict]
+    print("Found list of delays!")
     return sum(delays) / len(delays)
 
 def averagedelay(packetdict):
