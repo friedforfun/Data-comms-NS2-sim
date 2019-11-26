@@ -27,6 +27,12 @@ def processlist(trlist):
         pktset = sorted(set(pktset))
     return {'sent': sent, 'dropped': dropped, 'recieved': recieved, 'packetset': pktset}
 
+def setTraffic(listitem):
+    if listitem[EVENT] == '-':
+        return True
+    else:
+        return False
+
 def countsent(list):
     return len([x for x in list if x[EVENT] == '-'])
 
@@ -42,25 +48,42 @@ def findPacketSet(list):
     return sorted(packetset)
 
 def findPacketLines(list, packetid):
-    packetLines = [x for x in list if int(x[PKTID]) == packetid]
+    # packetLines = [x for x in list if int(x[PKTID]) == packetid]
+    # loops over list for evey element of packet id, really inefficient
+
+    packetLines = {}
+    for x in list:
+        tempentry = packetLines.get(int(x[PKTID]), [])
+        tempentry.append(x)
+        packetLines.update({int(x[PKTID]): tempentry})
+
+    print("Packet lines dict complete")
     return packetLines
 
 def findPacketDelay(list):
     packets = sorted(list, key=sortTime)
     start = packets[0]
     end = packets[-1]
-    return float(end[TIME]) - float(start[TIME])
+    avg = float(end[TIME]) - float(start[TIME])
+    return avg
 
-def averagedelay(list, packetset):
-    pool = Pool(os.cpu_count() - 1)
-    delays = pool.map(findPacketDelay, [findPacketLines(list, x) for x in packetset])
+def averagedelayTHREADED(packetdict):
+    pool = Pool(os.cpu_count())
+    delays = pool.map(findPacketDelay, [packetdict.get(key) for key in packetdict], 400)
+    print("Delays list populated")
     pool.close()
     pool.join()
-    # delaydict = dict(zip(packetset, delays))
+    return sum(delays) / len(delays)
+
+def averagedelay(packetdict):
+    delays = [findPacketDelay(packetdict.get(key)) for key in packetdict]
+    print("Found list of delays!")
     return sum(delays) / len(delays)
 
 def writeTotals(list):
-    with open('totals.csv', 'w') as csvfile:
+    global filen
+    file = os.path.splitext(filen)[0] + '-totals.csv'
+    with open(file, 'w') as csvfile:
         writer = csv.writer(csvfile)
         writer.writerow(['Total Packets', 'Total sent', 'Total recieved', 'Total Dropped', 'Average end-to-end Delay', 'Throughput', 'Lost'])
         writer.writerow(list)
@@ -69,7 +92,7 @@ def cleanlist(list):
     return [x for x in list if x[EVENT] != 'v']
 
 def isdatatraffic(sublist):
-    protocols = set(['cbr', 'ftp', 'tcp', 'udp'])
+    protocols = {'cbr', 'ftp', 'tcp', 'udp'}
     setlist = set(sublist)
     if (protocols & setlist):
         return True
@@ -82,32 +105,39 @@ def protocoltraffic(tlist):
 
 def prog(trace):
     tracelist = protocoltraffic(trace)
+
+    print("Tracefile made!")
     #tracelist = cleanlist(trace)
 
-    #packetset = findPacketSet(tracelist)
+    packetset = findPacketSet(tracelist)
 
-    dictionary = processlist(tracelist)
-
-    packetset = dictionary.get('packetset')
-    sent = dictionary.get('sent')
-    dropped = dictionary.get('dropped')
-    recieved = dictionary.get('recieved')
+    #dictionary = processlist(tracelist)
+    #print("Dictionary Made")
+    #packetset = dictionary.get('packetset')
+    #sent = dictionary.get('sent')
+    #dropped = dictionary.get('dropped')
+    #recieved = dictionary.get('recieved')
 
     #total number of unique packets
     packets = len(packetset)
-
+    print("Found packet set & length")
     #total number of packets sent from all nodes
-    #sent = countsent(tracelist)
-
+    sent = countsent(tracelist)
+    print("Found number of packets sent")
     # number of dropped packets
-    #dropped = countdropped(tracelist)
-
+    dropped = countdropped(tracelist)
+    print("Found number of packets dropped")
     # number of recieved packets
-    #recieved = countrecieved(tracelist)
+    recieved = countrecieved(tracelist)
+    print("Found number of packets recieved")
+
+    packetdict = findPacketLines(tracelist, packetset)
+
+    avedelay = averagedelay(packetdict)
 
     # average delay for each packet
-    avedelay = averagedelay(tracelist, packetset)
-
+    #avedelay = averagedelay(tracelist, packetset)
+    print("Found average delay of each packet")
     # Lost packets
     lost = sent - recieved
 
@@ -130,6 +160,9 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(formatter_class=argparse.RawTextHelpFormatter)
     parser.add_argument('filename')
     args = parser.parse_args()
+
+    global filen
+    filen = args.filename
 
     with open(args.filename) as file:
         f = file
