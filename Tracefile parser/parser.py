@@ -27,6 +27,12 @@ def processlist(trlist):
         pktset = sorted(set(pktset))
     return {'sent': sent, 'dropped': dropped, 'recieved': recieved, 'packetset': pktset}
 
+def setTraffic(listitem):
+    if listitem[EVENT] == '-':
+        return True
+    else:
+        return False
+
 def countsent(list):
     return len([x for x in list if x[EVENT] == '-'])
 
@@ -42,7 +48,14 @@ def findPacketSet(list):
     return sorted(packetset)
 
 def findPacketLines(list, packetid):
-    packetLines = [x for x in list if int(x[PKTID]) == packetid]
+    # packetLines = [x for x in list if int(x[PKTID]) == packetid]
+    # loops over list for evey element of packet id, really inefficient
+    packetLines = dict.fromkeys(packetid, [])
+    for x in list:
+        tempentry = packetLines[int(x[PKTID])]
+        tempentry.append(x)
+        packetLines.update({int(x[PKTID]): tempentry})
+    print("Packet lines dict complete")
     return packetLines
 
 def findPacketDelay(list):
@@ -51,12 +64,17 @@ def findPacketDelay(list):
     end = packets[-1]
     return float(end[TIME]) - float(start[TIME])
 
-def averagedelay(list, packetset):
+def averagedelayTHREADED(packetdict):
     pool = Pool(os.cpu_count() - 1)
-    delays = pool.map(findPacketDelay, [findPacketLines(list, x) for x in packetset])
+    delays = pool.map(findPacketDelay, [packetdict.get(key) for key in packetdict], 4000)
     pool.close()
     pool.join()
     # delaydict = dict(zip(packetset, delays))
+    return sum(delays) / len(delays)
+
+def averagedelay(packetdict):
+    delays = [findPacketDelay(packetdict.get(key)) for key in packetdict]
+    print("Found list of delays!")
     return sum(delays) / len(delays)
 
 def writeTotals(list):
@@ -69,7 +87,7 @@ def cleanlist(list):
     return [x for x in list if x[EVENT] != 'v']
 
 def isdatatraffic(sublist):
-    protocols = set(['cbr', 'ftp', 'tcp', 'udp'])
+    protocols = {'cbr', 'ftp', 'tcp', 'udp'}
     setlist = set(sublist)
     if (protocols & setlist):
         return True
@@ -82,32 +100,39 @@ def protocoltraffic(tlist):
 
 def prog(trace):
     tracelist = protocoltraffic(trace)
+
+    print("Tracefile made!")
     #tracelist = cleanlist(trace)
 
-    #packetset = findPacketSet(tracelist)
+    packetset = findPacketSet(tracelist)
 
-    dictionary = processlist(tracelist)
-
-    packetset = dictionary.get('packetset')
-    sent = dictionary.get('sent')
-    dropped = dictionary.get('dropped')
-    recieved = dictionary.get('recieved')
+    #dictionary = processlist(tracelist)
+    #print("Dictionary Made")
+    #packetset = dictionary.get('packetset')
+    #sent = dictionary.get('sent')
+    #dropped = dictionary.get('dropped')
+    #recieved = dictionary.get('recieved')
 
     #total number of unique packets
     packets = len(packetset)
-
+    print("Found packet set & length")
     #total number of packets sent from all nodes
-    #sent = countsent(tracelist)
-
+    sent = countsent(tracelist)
+    print("Found number of packets sent")
     # number of dropped packets
-    #dropped = countdropped(tracelist)
-
+    dropped = countdropped(tracelist)
+    print("Found number of packets dropped")
     # number of recieved packets
-    #recieved = countrecieved(tracelist)
+    recieved = countrecieved(tracelist)
+    print("Found number of packets recieved")
+
+    packetdict = findPacketLines(tracelist, packetset)
+
+    avedelay = averagedelayTHREADED(packetdict)
 
     # average delay for each packet
-    avedelay = averagedelay(tracelist, packetset)
-
+    #avedelay = averagedelay(tracelist, packetset)
+    print("Found average delay of each packet")
     # Lost packets
     lost = sent - recieved
 
