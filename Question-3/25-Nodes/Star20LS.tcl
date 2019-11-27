@@ -28,7 +28,8 @@ proc finish {} {
 
 set networkSize 25
 for {set i 0} {$i < $networkSize} {incr i} {
-    set n($i) [$ns node]
+    set n1($i) [$ns node]
+    set n2($i) [$ns node]
 }
 
 
@@ -40,45 +41,40 @@ $R1 shape square
 $R2 shape square
 $R3 shape square
 
-$ns duplex-link $R1 $R2 1000Mb 15ms DropTail
-$ns duplex-link $R1 $R3 1000Mb 5ms DropTail
-$ns duplex-link $R3 $R2 1000Mb 5ms DropTail
-$ns duplex-link $n(1) $R3 10Mb 10ms DropTail
-$ns duplex-link $n(24) $R3 10Mb 10ms DropTail
-$ns duplex-link $n(0) $R1 10Mb 10ms DropTail
-$ns duplex-link $n(23) $R2 10Mb 10ms DropTail
+$ns duplex-link $R1 $R2 100Mb 15ms DropTail
+$ns duplex-link $R1 $R3 50Mb 8ms DropTail
+$ns duplex-link $R2 $R3 50Mb 8ms DropTail
 
-for {set i 1} {$i < 13} {incr i} {
-    $ns duplex-link $n($i) $n(0) 10Mb 10ms DropTail
+$ns duplex-link $R1 $n1(0) 10Mb 5ms DropTail
+$ns duplex-link $R3 $n2(0) 10Mb 5ms DropTail
+
+
+
+for {set i 0} {$i < $networkSize} {incr i} {
+    $ns duplex-link $n1($i) $n1([expr ($i+1)%3]) 10Mb 10ms DropTail
+    $ns duplex-link $n2($i) $n2([expr ($i+1)%3]) 10Mb 10ms DropTail
 }
-
-for {set i 13} {$i < $networkSize} {incr i} {
-    $ns duplex-link $n($i) $n(24) 10Mb 10ms DropTail
-}
-
-# use the distance vector routing protocol
-$ns rtproto LS
 
 for {set i 0} {$i < 5} {incr i} {
-    set udp($i) [new Agent/UDP]
-    $ns attach-agent $n([expr ($i*7)%$networkSize]) $udp($i)
+	set udp($i) [new Agent/UDP]
+    $ns attach-agent $n1([expr ($i*7)%$networkSize]) $udp($i)
     set null($i) [new Agent/Null]
-    $ns attach-agent $n([expr ($i*9)%$networkSize]) $null($i)
+    $ns attach-agent $n2([expr ($i*9)%$networkSize]) $null($i)
     $ns connect $udp($i) $null($i)
     $udp($i) set fid_ 3
 
     set cbr($i) [new Application/Traffic/CBR]
     $cbr($i) attach-agent $udp($i)
     $cbr($i) set type_ CBR
-    $cbr($i) set packet_size_ [expr (150*$i)]
+    $cbr($i) set packet_size_ [expr (255*$i)]
     $cbr($i) set rate_ 1mb
     $cbr($i) set random_ false
 
     set tcp($i) [new Agent/TCP]
     $tcp($i) set class_ 2
-    $ns attach-agent $n([expr ($i*3)%$networkSize]) $tcp($i)
+    $ns attach-agent $n2([expr ($i*3)%$networkSize]) $tcp($i)
     set sink($i) [new Agent/TCPSink]
-    $ns attach-agent $n([expr ($i*2+20)%$networkSize]) $sink($i)
+    $ns attach-agent $n1([expr ($i*2+20)%$networkSize]) $sink($i)
     $ns connect $tcp($i) $sink($i)
     $tcp($i) set fid_ 1
 
@@ -86,6 +82,9 @@ for {set i 0} {$i < 5} {incr i} {
     $ftp($i) attach-agent $tcp($i)
     $ftp($i) set type_ FTP
 }
+
+# use the distance vector routing protocol
+$ns rtproto LS
 
 
 for {set i 0} {$i < 5} {incr i} {
@@ -96,14 +95,6 @@ for {set i 0} {$i < 5} {incr i} {
 
 }
 
-$ns rtmodel-at 6.0 down $R3 $n1(0)
-$ns rtmodel-at 6.4 up $R3 $n1(0)
-
-$ns rtmodel-at 6.4 down $R1 $R2
-$ns rtmodel-at 12.0 up $R1 $R2
-
-$ns rtmodel-at 6.2 down $R2 $R3
-$ns rtmodel-at 9.0 up $R2 $R3
 
 
 #Call the finish procedure after 5 seconds simulation time
